@@ -7,11 +7,14 @@
 void *thread_routine(void *arg)
 {
     int *args = (int *)arg;
-    int len = 2;
+    int len = args[0];
+    //printf("!! LUNGIME=%d !!",len);
+    //len = 3;
+    //printf("!! LUNGIME=%d !!",len);
     int *ret = malloc(sizeof(int));
     *ret = 0;
 
-    for (int i = 0; i < len; i++)
+    for (int i = 1; i <= len; i++)
     {
         *ret += args[i] * args[i + len];
     }
@@ -43,7 +46,7 @@ int main(int argc, char** argv)
 
 
 	pthread_t thread[COUNT];
-	int args[COUNT+1][2*n];
+	int args[COUNT][2*n+1];
 
 
 
@@ -54,23 +57,31 @@ int main(int argc, char** argv)
 		{
 			for(int j=0;j<n;j++)
 			{
-				args[cont][j] = matrix[i][j];
+				args[cont][j+1] = matrix[i][j];
 			}
+			args[cont][0]=n;
 			cont++;
 		}
 	}
 	
 	cont = 0;
 	for(int k=0;k<n;k++)
-	for(int i=0;i<n;i++)
-	{
-		for(int j=0;j<n;j++)
+		for(int i=0;i<n;i++)
 		{
-			args[cont][j+n] = matrix2[j][i];
+			for(int j=0;j<n;j++)
+			{
+				args[cont][j+n+1] = matrix2[j][i];
+			}
+			cont++;
 		}
-		cont++;
+/*
+	for(int i=0;i<COUNT;i++)
+	{
+		for(int j=0;j<2*n;j++)
+			printf("%d ", args[i][j]);
+		printf("\n");
 	}
-
+*/
 	for(int i=0;i<COUNT;i++)
 		pthread_create(&thread[i],NULL,thread_routine,args[i]);	
 	
@@ -78,9 +89,9 @@ int main(int argc, char** argv)
 		
 	
 	cont = 0;
-	for(int i=0;i<COUNT/2;i++)
+	for(int i=0;i<n;i++)
 	{
-		for(int j=0;j<COUNT/2;j++)
+		for(int j=0;j<n;j++)
 		{
 			int* ret;
 			pthread_join(thread[cont],(void **)&ret);
