@@ -103,5 +103,3 @@ int main(int argc, char** argv)
 	
 	return 0;		
 }
-/*
-i have a function that returns the result of only a cell from a matrix. In that function i recieve as a parameter an array that is like this: the first half are the numbers from the line from the first matrix, and the second half are numbers from the column from the second matrix. I already have this function and it works perfecty. I need an algorithm that creates the array that i will give as a parameter*/
